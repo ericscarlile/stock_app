@@ -6,8 +6,8 @@ from django.db import models
 class Stock(models.Model):
     name = models.CharField(max_length=50)
     ticker = models.CharField(max_length=5, unique=True)
-    price = models.FloatField()
-    price_target = models.FloatField()
+    price = models.FloatField(null=True)
+    price_target = models.FloatField(null=True)
     is_bullish = models.NullBooleanField(null=True)
     last_updated = models.DateField()
 

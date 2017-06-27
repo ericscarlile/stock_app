@@ -16,19 +16,24 @@ def populate_stocks():
         ticker_list.extend(list(map(''.join, product(ascii_uppercase, repeat=i))))
 
     for tick in ticker_list:
+        print("Checking " + tick + ".")
         if Share(tick).get_name():
-            stock_info = Share(tick)
+            try:
+                if Stock.objects.get(ticker=tick):
+                    print(tick + " already exists. Skipping database entry.")
+                    continue
+            except:
+                stock_info = Share(tick)
+                stock = Stock(
+                    name=stock_info.get_name(),
+                    ticker=tick,
+                    price=stock_info.get_price(),
+                    price_target=stock_info.get_one_yr_target_price(),
+                    is_bullish=None,
+                    last_updated=timezone.now()
+                )
+                stock.save()
 
-            stock = Stock(
-                name=stock_info.get_name(),
-                ticker=tick,
-                price=stock_info.get_price(),
-                price_target=stock_info.get_one_yr_target_price(),
-                is_bullish=None,
-                last_updated=timezone.now()
-            )
-            stock.save()
-
-            print(tick + " " + Share(tick).get_name())
+                print(tick + " " + Share(tick).get_name())
 
 

@@ -16,7 +16,10 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from login.views import LoginView
+
 urlpatterns = [
     url(r'^', include('stock_app.urls')),
+    url(r'^login/', LoginView.as_view(), name='login_view'),
     url(r'^admin/', admin.site.urls),
 ]
