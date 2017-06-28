@@ -5,6 +5,12 @@
     <title>{% block title %}Base Template{% endblock %}</title>
 </head>
 <body>
+<ul class="nav nav-tabs">
+    <li role="presentation"><a href="{% url 'login_view' %}">Login</a></li>
+    <li role="presentation"><a href="{% url 'logout_view' %}">Logout</a></li>
+    <li role="presentation"><a href="{% url 'create_user_view' %}">Create</a></li>
+    <li role="presentation"><a href="{% url 'index' %}">Home</a></li>
+</ul>
 {% block content %}
     <h1>Base Template</h1>
 {% endblock %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic.base import TemplateView
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
 from stock_app.views import IndexView
@@ -9,6 +9,7 @@ from stock_app.views import IndexView
 
 class LoginView(TemplateView):
     template_name = 'login/login.html'
+    #template_name = '/stock_app/templates/base.html'
 
     def post(self, request, *args, **kwargs):
         username = request.POST['username']
@@ -16,18 +17,12 @@ class LoginView(TemplateView):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            # TODO: Uncomment login() when log in/out has been established.
-            #login(request, user)
-
+            login(request, user)
             return redirect('http://127.0.0.1:8000/')
         else:
             return render(request, 'login/login.html', {
                 'error_message': 'Failed login'
             })
-
-    def get_context_data(self, **kwargs):
-        context = {}
-        return context
 
 
 class CreateUserView(TemplateView):
@@ -66,6 +61,7 @@ class CreateUserView(TemplateView):
             user.last_name = last_name
             user.save()
 
+            login(request, user)
             return redirect('http://127.0.0.1:8000/')
 
         return render(request, 'login/create.html', {
@@ -74,3 +70,11 @@ class CreateUserView(TemplateView):
 
     def get_context_data(self, **kwargs):
         return None
+
+
+class LogoutView(TemplateView):
+    template_name = 'login/logout.html'
+
+    def get(self, request):
+        logout(request)
+        return redirect('http://127.0.0.1:8000/')
