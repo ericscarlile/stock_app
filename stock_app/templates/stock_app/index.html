@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Index Page!</title>
-</head>
-<body>
-    <h1>It works with classes!</h1>
-</body>
-</html>
+{% extends './base.html' %}
+
+{% block title %}Index Page{% endblock %}
+
+{% block content %}
+<h1>This is the index page extended from the base page.</h1>
+{% endblock %}

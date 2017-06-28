@@ -43,7 +43,6 @@ class CreateUserView(TemplateView):
         if request.POST['password']:
             password = request.POST['password']
         else:
-            info = 'no pass'
             error_message += 'You must enter a password.\n'
 
         if request.POST['email']:
