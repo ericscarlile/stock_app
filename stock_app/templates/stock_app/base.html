@@ -3,14 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Base Template{% endblock %}</title>
+
+    <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet">
 </head>
 <body>
-<ul class="nav nav-tabs">
-    <li role="presentation"><a href="{% url 'login_view' %}">Login</a></li>
-    <li role="presentation"><a href="{% url 'logout_view' %}">Logout</a></li>
-    <li role="presentation"><a href="{% url 'create_user_view' %}">Create</a></li>
-    <li role="presentation"><a href="{% url 'index' %}">Home</a></li>
-</ul>
+<nav class="navbar navbar-default">
+    <p class="navbar-text">Signed in as {{ user }}</p>
+
+    <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search for stocks">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </form>
+
+    <ul class="nav nav-tabs navbar-right">
+        {% if not user.is_active %}
+        <li role="presentation"><a href="{% url 'login_view' %}">Login</a></li>
+        <li role="presentation"><a href="{% url 'create_user_view' %}">Create</a></li>
+        {% endif %}
+        {% if user.is_active %}
+        <li role="presentation"><a href="{% url 'index' %}">Home</a></li>
+        <li role="presentation"><a href="{% url 'logout_view' %}">Logout</a></li>
+        {% endif%}
+    </ul>
+</nav>
+
 {% block content %}
     <h1>Base Template</h1>
 {% endblock %}
