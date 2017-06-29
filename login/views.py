@@ -3,13 +3,11 @@ from django.http import HttpResponse
 from django.views.generic.base import TemplateView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-
-from stock_app.views import IndexView
+from django.contrib.auth import get_user_model
 
 
 class LoginView(TemplateView):
     template_name = 'login/login.html'
-    #template_name = '/stock_app/templates/base.html'
 
     def post(self, request, *args, **kwargs):
         username = request.POST['username']
@@ -26,6 +24,7 @@ class LoginView(TemplateView):
 
 
 class CreateUserView(TemplateView):
+    #User = get_user_model()
     template_name = 'login/create.html'
 
     def post(self, request, *args, **kwargs):
@@ -45,20 +44,9 @@ class CreateUserView(TemplateView):
         else:
             error_message += 'You must enter an email.\n'
 
-        if request.POST['first_name']:
-            first_name = request.POST['first_name']
-        else:
-            error_message += 'You must enter a first name.\n'
-
-        if request.POST['last_name']:
-            last_name = request.POST['last_name']
-        else:
-            error_message += 'You must enter a last name.\n'
-
         if not error_message:
+            User = get_user_model()
             user = User.objects.create_user(username, email, password)
-            user.first_name = first_name
-            user.last_name = last_name
             user.save()
 
             login(request, user)
