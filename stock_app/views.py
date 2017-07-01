@@ -8,6 +8,9 @@ from django.views import generic
 import html.parser
 import urllib.request
 import json
+from django.core.exceptions import ObjectDoesNotExist
+from yahoo_finance import Share
+from django.utils import timezone
 
 from .models import Stock
 
@@ -31,10 +34,32 @@ class StockDetailView(LoginRequiredMixin, generic.DetailView):
             'context_info': "post request"
         })
 
-    def get(self, request):
+    def get(self, request, symbol):
+
+        try:
+            stock = Stock.objects.get(ticker=symbol)
+        except ObjectDoesNotExist:
+            stock_info = Share(symbol)
+            stock = Stock(
+                name=stock_info.get_name(),
+                ticker=symbol,
+                price=stock_info.get_price(),
+                price_target=stock_info.get_one_yr_target_price(),
+                is_bullish=None,
+                last_updated=timezone.now()
+            )
+            stock.save()
+
+            try:
+                stock = Stock.objects.get(ticker=symbol)
+            except ObjectDoesNotExist:
+                stock = "Still can not pull stock."
+
         return render(request, self.template_name, {
+            'stock': stock,
             'context_info': "get request"
         })
+
 
 
 # This class has been replaced by ajax calls.

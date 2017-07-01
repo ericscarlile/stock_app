@@ -15,7 +15,7 @@
     <form id="search_form" class="navbar-form navbar-left search" role="search" method="post"
         action="">{% csrf_token %}
         <div class="form-group">
-            <input id="search_box" type="text" class="form-control" placeholder="Search for stocks" name="search_key" onkeyup="search_stocks()">
+            <input id="search_box" type="text" class="form-control" placeholder="Search for stocks" name="search_key" autocomplete="off" onkeyup="search_stocks()">
             <ul id="results" class="results">
             </ul>
         </div>
