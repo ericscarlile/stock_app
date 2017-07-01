@@ -23,9 +23,6 @@ class IndexView(LoginRequiredMixin, generic.ListView):
 
 class StockSearchView(LoginRequiredMixin, generic.ListView):
 
-
-
-
         def search_stock(self, request):
             template_name = 'stock_app/test.html'
             search_key = request.POST['search_key']

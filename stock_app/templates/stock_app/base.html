@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" name="referrer" content="no-referrer">
     <title>{% block title %}Base Template{% endblock %}</title>
 
+    {% load static %}
     <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet">
+    <link href="{% static 'stock_app/styles/search_bar.css' %}" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-default">
     <p class="navbar-text">Signed in as {{ user }}</p>
 
-    <form class="navbar-form navbar-left" role="search" method="post"
-        action="{% url 'stock_search' %}">{% csrf_token %}
+    <form id="search_form" class="navbar-form navbar-left search" role="search" method="post"
+        action="">{% csrf_token %}
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search for stocks" name="search_key">
+            <input id="search_box" type="text" class="form-control" placeholder="Search for stocks" name="search_key" onkeyup="search_stocks()">
+            <ul id="results" class="results">
+            </ul>
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
     </form>
@@ -33,5 +37,8 @@
 {% block content %}
     <h1>Base Template</h1>
 {% endblock %}
+
+<script src="{% static 'stock_app/javascript/libs/jquery.min.js' %}"></script>
+<script src="{% static 'stock_app/javascript/search_bar.js' %}"></script>
 </body>
 </html>
