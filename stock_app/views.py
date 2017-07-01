@@ -6,9 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 import html.parser
-
 import urllib.request
 import json
+
+from .models import Stock
 
 
 class IndexView(LoginRequiredMixin, generic.ListView):
@@ -21,6 +22,24 @@ class IndexView(LoginRequiredMixin, generic.ListView):
         pass
 
 
+class StockDetailView(LoginRequiredMixin, generic.DetailView):
+    template_name = 'stock_app/stock_detail.html'
+    model = Stock
+
+    def post(self, request):
+        return render(request, self.template_name, {
+            'context_info': "post request"
+        })
+
+    def get(self, request):
+        return render(request, self.template_name, {
+            'context_info': "get request"
+        })
+
+
+# This class has been replaced by ajax calls.
+# It is still here in case a need for it is found in the near future.
+# Will be removed after completion of the app if there is no need for it.
 class StockSearchView(LoginRequiredMixin, generic.ListView):
 
         def search_stock(self, request):

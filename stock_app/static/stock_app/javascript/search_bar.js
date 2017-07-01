@@ -1,4 +1,4 @@
-function search_stocks() {
+function search_stocks(event) {
     // Get current text from input
     // Format text to remove spaces
     // Set as search_url
@@ -28,7 +28,7 @@ function search_stocks() {
             $result_list.empty();
             $.each(data['ResultSet']['Result'], function(key, obj){
                 if ($.inArray(obj['exchDisp'], exchanges) !== -1) {
-                    $result_list.append('<li><a href="#">' + obj['symbol'] +
+                    $result_list.append('<li><a href="/stock/' + obj['symbol'] + '">' + obj['symbol'] +
                         ': ' + obj['name'] + '</a></li>');
                     };
                 });
