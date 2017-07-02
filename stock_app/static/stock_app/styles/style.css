@@ -1,5 +1,6 @@
 div section {
     text-align: center;
+    position: relative;
     /*border: 1px solid blue;*/
 }
 
@@ -9,10 +10,9 @@ div section article.panel {
     margin-left: auto;
     margin-right: auto;
     text-align: left;
-    /*margin: auto auto;*/
     display: inline-block;
-
     float: none;
+
     /*border: 1px solid green;*/
 }
 
@@ -26,4 +26,10 @@ div section article.panel div.panel-heading a {
 
 div section article.panel div table {
     background-color: #fdfdfd;
+}
+
+.remove_stock {
+    position: absolute;
+    top: 0px;
+    right: 0px;
 }

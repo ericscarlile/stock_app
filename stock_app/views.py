@@ -16,14 +16,23 @@ from .models import Stock, User
 
 
 class IndexView(LoginRequiredMixin, generic.ListView):
+    template_name = 'stock_app/index.html'
+    test_list = []
 
     def get(self, request):
-
-        template_name = 'stock_app/index.html'
-        return render(request, template_name)
+        self.test_list = []
+        self.update_stocks(request)
+        return render(request, self.template_name, {
+            'test_info': self.test_list,
+        })
 
     def post(self, request):
         pass
+
+    def update_stocks(self, request):
+        user = User.objects.get(username=request.user)
+        for stock in list(user.stocks.all()):
+            self.test_list.append(stock.ticker)
 
 
 class StockDetailView(LoginRequiredMixin, generic.DetailView):
