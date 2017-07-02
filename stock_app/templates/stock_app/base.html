@@ -7,9 +7,11 @@
     {% load static %}
     <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet">
     <link href="{% static 'stock_app/styles/search_bar.css' %}" rel="stylesheet">
+    <link href="{% static 'stock_app/styles/style.css' %}" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-default">
+    <div class="container-fluid">
     <p class="navbar-text">Signed in as {{ user }}</p>
 
     <form id="search_form" class="navbar-form navbar-left search" role="search" method="post"
@@ -31,6 +33,7 @@
         <li role="presentation"><a href="{% url 'logout_view' %}">Logout</a></li>
         {% endif%}
     </ul>
+    </div><!-- container-fluid -->
 </nav>
 
 {% block content %}

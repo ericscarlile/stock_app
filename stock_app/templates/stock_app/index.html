@@ -3,12 +3,30 @@
 {% block title %}Index Page{% endblock %}
 
 {% block content %}
-<h1>This is the index page extended from the base page.</h1>
-<p>Logged in as {{user}}!</p>
-<a href="stock/A">link</a>
-<ul>
+<div class="container-fluid">
+<section class="row">
     {% for stock in user.stocks.all %}
-    <li>{{ stock }}</li>
+    <article class="col-md-4 col-sm-6 col-xs-12 panel panel-success">
+        <div class="panel-heading"><a href="/stock/{{ stock.ticker }}">{{ stock.name }}</a></div>
+        <table class="table">
+            <tr>
+                <td>Stock Symbol:</td>
+                <td>{{ stock.ticker }}</td>
+            </tr>
+
+            <tr>
+                <td>Price:</td>
+                <td>{{ stock.price }}</td>
+            </tr>
+
+            <tr>
+                <td>Price Target:</td>
+                <td>{{ stock.price_target }}</td>
+            </tr>
+        </table>
+    </article>
     {% endfor %}
-</ul>
+</section>
+</div>
+
 {% endblock %}

@@ -1,0 +1,29 @@
+div section {
+    text-align: center;
+    /*border: 1px solid blue;*/
+}
+
+div section article.panel {
+    box-sizing: border-box;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+    /*margin: auto auto;*/
+    display: inline-block;
+
+    float: none;
+    /*border: 1px solid green;*/
+}
+
+div section article.panel div.panel-heading {
+    text-align: center;
+}
+
+div section article.panel div.panel-heading a {
+    color: inherit;
+}
+
+div section article.panel div table {
+    background-color: #fdfdfd;
+}
