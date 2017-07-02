@@ -4,4 +4,16 @@
 {% block content %}
 <h1>{{ stock.name }}</h1>
 <p>{{ stock }}</p>
+{{ stock.name}} {{user.stocks.all}}
+{% if stock.name not in user.stocks.all %}
+<p id="stock_add"><a href="#" onclick="add_stock('{{ stock.ticker }}')">Add this stock</a></p>
+{% endif %}
+
+
+<p id="test"></p>
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static 'stock_app/javascript/add_stock.js' %}"></script>
 {% endblock %}

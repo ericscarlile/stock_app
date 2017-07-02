@@ -12,12 +12,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from yahoo_finance import Share
 from django.utils import timezone
 
-from .models import Stock
+from .models import Stock, User
 
 
 class IndexView(LoginRequiredMixin, generic.ListView):
 
     def get(self, request):
+
         template_name = 'stock_app/index.html'
         return render(request, template_name)
 
@@ -29,7 +30,10 @@ class StockDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = 'stock_app/stock_detail.html'
     model = Stock
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
+        if self.request.is_ajax():
+            return self.ajax(request)
+
         return render(request, self.template_name, {
             'context_info': "post request"
         })
@@ -59,6 +63,30 @@ class StockDetailView(LoginRequiredMixin, generic.DetailView):
             'stock': stock,
             'context_info': "get request"
         })
+
+    def ajax(self, request):
+
+        user = User.objects.get(username=request.user);
+        action = request.POST.get('action', '');
+        symbol = request.POST.get('symbol', '');
+
+        response_dict = {
+            'success': 'initial',
+        }
+        if action == 'add_stock':
+            try:
+                user.stocks.add(Stock.objects.get(ticker=symbol))
+                user.save()
+                response_dict = {
+                    'success': 'try',
+                }
+            except:
+                response_dict = {
+                    'success': 'exception2',
+                }
+
+        return HttpResponse(json.dumps(response_dict))
+                           # mimetype='application/json')
 
 
 

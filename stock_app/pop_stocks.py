@@ -1,7 +1,6 @@
 from yahoo_finance import Share
 from itertools import product
 from string import ascii_uppercase
-from django.utils import timezone
 
 from .models import Stock
 
