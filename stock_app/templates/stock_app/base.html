@@ -20,14 +20,14 @@
         {% if user.is_active %}
     <p class="navbar-text">Signed in as {{ user }}</p>
 
-    <form id="search_form" class="navbar-form navbar-left search" role="search" method="post"
-        action="">{% csrf_token %}
+    <div id="search_form" class="navbar-form navbar-left search" role="search" method="post"
+        action="">
         <div class="form-group">
             <input id="search_box" type="text" class="form-control" placeholder="Search for stocks" name="search_key" autocomplete="off" onkeyup="search_stocks()">
             <ul id="results" class="results">
             </ul>
         </div>
-    </form>
+    </div>
         {% endif %}
 
     <ul class="nav nav-tabs navbar-right">
