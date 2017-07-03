@@ -8,11 +8,14 @@
     <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet">
     <link href="{% static 'stock_app/styles/search_bar.css' %}" rel="stylesheet">
     <link href="{% static 'stock_app/styles/style.css' %}" rel="stylesheet">
+    <link href="{% static 'stock_app/styles/tooltip_style.css' %}" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
+        {% if user %}
     <p class="navbar-text">Signed in as {{ user }}</p>
+        {% endif %}
 
     <form id="search_form" class="navbar-form navbar-left search" role="search" method="post"
         action="">{% csrf_token %}
@@ -42,6 +45,7 @@
 
 <script src="{% static 'stock_app/javascript/libs/jquery.min.js' %}"></script>
 <script src="{% static 'stock_app/javascript/search_bar.js' %}"></script>
+<script src="{% static 'stock_app/javascript/edit_stock.js' %}"></script>
 {% block scripts %}
 {% endblock %}
 </body>

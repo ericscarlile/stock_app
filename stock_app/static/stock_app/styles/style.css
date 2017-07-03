@@ -24,6 +24,10 @@ div section article.panel div.panel-heading a {
     color: inherit;
 }
 
+div section article.panel div.panel-heading a:hover {
+    text-decoration: none;
+}
+
 div section article.panel div table {
     background-color: #fdfdfd;
 }
