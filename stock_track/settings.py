@@ -137,9 +137,9 @@ LOGIN_URL = '/login'
 AUTH_USER_MODEL = 'stock_app.User'
 
 # Extra places for collectstatic to find static files.
-STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
-)
+#STATICFILES_DIRS = (
+#    os.path.join(PROJECT_ROOT, 'static'),
+#)
 
 import dj_database_url
 DATABASES['default'] = dj_database_url.config()
