@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 
+from stock_app.views import IndexView
 
 class LoginView(TemplateView):
     template_name = 'login/login.html'
@@ -16,7 +17,7 @@ class LoginView(TemplateView):
 
         if user is not None:
             login(request, user)
-            return redirect('http://127.0.0.1:8000/')
+            return redirect('index')
         else:
             return render(request, 'login/login.html', {
                 'error_message': 'Failed login'
@@ -26,6 +27,9 @@ class LoginView(TemplateView):
 class CreateUserView(TemplateView):
     #User = get_user_model()
     template_name = 'login/create.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
 
     def post(self, request, *args, **kwargs):
         error_message = ''
@@ -50,19 +54,20 @@ class CreateUserView(TemplateView):
             user.save()
 
             login(request, user)
-            return redirect('http://127.0.0.1:8000/')
+            return redirect('index')
 
         return render(request, 'login/create.html', {
             'error_message': error_message
         })
+
 
     def get_context_data(self, **kwargs):
         return None
 
 
 class LogoutView(TemplateView):
-    template_name = 'login/logout.html'
+    template_name = 'login/login.html'
 
     def get(self, request):
         logout(request)
-        return redirect('http://127.0.0.1:8000/')
+        return redirect('login_view')
