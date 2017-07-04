@@ -16,14 +16,63 @@ from .models import Stock, User
 
 
 class IndexView(LoginRequiredMixin, generic.ListView):
+    template_name = 'stock_app/index.html'
+    test_list = []
+
+
 
     def get(self, request):
+        self.test_list = []
+        self.update_stocks(request)
+        return render(request, self.template_name, {
+            'test_info': self.test_list,
+        })
 
-        template_name = 'stock_app/index.html'
-        return render(request, template_name)
+    def post(self, request, *args, **kwargs):
+        if self.request.is_ajax():
+            return self.ajax(request)
 
-    def post(self, request):
-        pass
+    def update_stocks(self, request):
+        user = User.objects.get(username=request.user)
+        for stock in list(user.stocks.all()):
+            self.test_list.append(stock.ticker)
+
+    def ajax(self, request):
+
+        user = User.objects.get(username=request.user);
+        action = request.POST.get('action', '');
+        symbol = request.POST.get('symbol', '');
+
+        response_dict = {
+            'success': 'initial',
+        }
+
+        if action == 'add_stock':
+            try:
+                user.stocks.add(Stock.objects.get(ticker=symbol))
+                user.save()
+                response_dict = {
+                    'success': 'try',
+                }
+            except:
+                response_dict = {
+                    'success': 'exception add_stock',
+                }
+
+        if action == 'remove_stock':
+            try:
+                user.stocks.remove(Stock.objects.get(ticker=symbol))
+                response_dict = {
+                    'success': 'removed',
+                }
+            except:
+                response_dict = {
+                    'success': 'exception remove_stock',
+                }
+
+        return HttpResponse(json.dumps(response_dict))
+
+
 
 
 class StockDetailView(LoginRequiredMixin, generic.DetailView):
@@ -82,11 +131,18 @@ class StockDetailView(LoginRequiredMixin, generic.DetailView):
                 }
             except:
                 response_dict = {
-                    'success': 'exception2',
+                    'success': 'exception add_stock',
+                }
+
+        if action == 'remove_stock':
+            try:
+                user.stocks.remove(Stock.objects.get(ticker=symbol))
+            except:
+                response_dict = {
+                    'success': 'exception remove_stock',
                 }
 
         return HttpResponse(json.dumps(response_dict))
-                           # mimetype='application/json')
 
 
 

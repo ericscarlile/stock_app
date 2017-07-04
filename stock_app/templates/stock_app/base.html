@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% if user.is_active %}
     <meta charset="UTF-8" name="referrer" content="no-referrer">
+    {% endif %}
+
+
     <title>{% block title %}Base Template{% endblock %}</title>
 
     {% load static %}
     <link href = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel = "stylesheet">
     <link href="{% static 'stock_app/styles/search_bar.css' %}" rel="stylesheet">
+    <link href="{% static 'stock_app/styles/style.css' %}" rel="stylesheet">
+    <link href="{% static 'stock_app/styles/tooltip_style.css' %}" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-default">
+    <div class="container-fluid">
+        {% if user.is_active %}
     <p class="navbar-text">Signed in as {{ user }}</p>
 
-    <form id="search_form" class="navbar-form navbar-left search" role="search" method="post"
-        action="">{% csrf_token %}
+    <div id="search_form" class="navbar-form navbar-left search" role="search" method="post"
+        action="">
         <div class="form-group">
             <input id="search_box" type="text" class="form-control" placeholder="Search for stocks" name="search_key" autocomplete="off" onkeyup="search_stocks()">
             <ul id="results" class="results">
             </ul>
         </div>
-    </form>
+    </div>
+        {% endif %}
 
     <ul class="nav nav-tabs navbar-right">
         {% if not user.is_active %}
@@ -31,6 +40,7 @@
         <li role="presentation"><a href="{% url 'logout_view' %}">Logout</a></li>
         {% endif%}
     </ul>
+    </div><!-- container-fluid -->
 </nav>
 
 {% block content %}
@@ -39,6 +49,7 @@
 
 <script src="{% static 'stock_app/javascript/libs/jquery.min.js' %}"></script>
 <script src="{% static 'stock_app/javascript/search_bar.js' %}"></script>
+<script src="{% static 'stock_app/javascript/edit_stock.js' %}"></script>
 {% block scripts %}
 {% endblock %}
 </body>
