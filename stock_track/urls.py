@@ -20,6 +20,7 @@ from login.views import LoginView, CreateUserView, LogoutView
 
 urlpatterns = [
     url(r'^', include('stock_app.urls')),
+    url('r^api/', include('api.urls')),
     url(r'^login/', LoginView.as_view(), name='login_view'),
     url(r'^create/', CreateUserView.as_view(), name='create_user_view'),
     url(r'^logout/', LogoutView.as_view(), name='logout_view'),
