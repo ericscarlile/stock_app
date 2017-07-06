@@ -6,11 +6,9 @@
 <p>{{ stock }}</p>
 {{ stock.name}} {{user.stocks.all}}
 {% if stock.name not in user.stocks.all %}
+<form>{% csrf_token %]</form>
 <p id="stock_add"><a href="#" onclick="add_stock('{{ stock.ticker }}')">Add this stock</a></p>
 {% endif %}
-
-
-<p id="test"></p>
 {% endblock %}
 
 {% block scripts %}

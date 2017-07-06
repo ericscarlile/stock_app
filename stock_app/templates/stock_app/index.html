@@ -9,6 +9,7 @@
     {% for stock in user.stocks.all %}
     <article id="{{ stock.ticker }}" class="col-md-4 col-sm-6 col-xs-12 panel panel-success">
         <div class="panel-heading"><a href="/stock/{{ stock.ticker }}">{{ stock.name }}</a>
+            <form>{% csrf_token %}</form>
             <a href="#" class="glyphicon glyphicon-remove remove_stock" onclick="remove_stock('{{ stock.ticker }}')"></a></div>
         <table class="table">
             <tr>
