@@ -2,11 +2,42 @@
 {% block title %}Stock Detail{% endblock %}
 
 {% block content %}
-<h1>{{ stock.name }}</h1>
-<p>{{ stock }}</p>
-{{ stock.name}} {{user.stocks.all}}
-<form>{% csrf_token %}</form>
-<p id="stock_add"><a href="#" onclick="add_stock('{{ stock.ticker }}')">Add this stock</a></p>
+<div class="'container-fluid">
+
+    <section class="sm-col-12 panel panel-info stock-detail">
+        <div class="panel-heading page-header">
+            <h1>{{ stock.name }}</h1>
+        </div>
+
+        <table class="table align-left">
+            <tr>
+                <td>Stock Symbol:</td>
+                <td>{{ stock.ticker }}</td>
+            </tr>
+            <tr>
+                <td>Stock Price:</td>
+                <td>{{ stock.price }}</td>
+            </tr>
+            <tr>
+                <td>Price Target:</td>
+                <td>{{ stock.price_target }}</td>
+            </tr>
+        </table>
+
+        {% if stock_tracked != True %}
+            <form>{% csrf_token %}</form>
+            <p id="stock_add"><a href="#" onclick="add_stock('{{ stock.ticker }}')">Add this stock</a></p>
+        {% endif %}
+
+
+
+        {% if stock.name not in user.stocks.all %}
+
+        {% endif %}
+
+    </section>
+
+</div> <!-- container fluid -->
 {% endblock %}
 
 {% block scripts %}

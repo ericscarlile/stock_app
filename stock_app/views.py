@@ -47,7 +47,7 @@ class StockDetailView(LoginRequiredMixin, generic.DetailView):
             return self.ajax(request)
 
         return render(request, self.template_name, {
-            'context_info': "post request"
+            #'stock_tracked': self.stock_tracked(request, symbol)
         })
 
     def get(self, request, symbol):
@@ -73,7 +73,7 @@ class StockDetailView(LoginRequiredMixin, generic.DetailView):
 
         return render(request, self.template_name, {
             'stock': stock,
-            'context_info': "get request"
+            'stock_tracked': self.stock_tracked(request, symbol)
         })
 
     def ajax(self, request):
@@ -107,6 +107,13 @@ class StockDetailView(LoginRequiredMixin, generic.DetailView):
 
         return HttpResponse(json.dumps(response_dict))
 
+    def stock_tracked(self, request, symbol):
+        user = User.objects.get(username=request.user);
+        try:
+            if user.stocks.get(ticker=symbol):
+                return True
+        except:
+            return False
 
 
 # This class has been replaced by ajax calls.
