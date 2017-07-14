@@ -1,17 +1,20 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.generic.base import TemplateView
 import urllib.request
 import json
 
-from .models import Stocks
+from stock_app.models import User, Stock
+
 
 # Create your views here.
 
 class APIView(TemplateView):
 
     def post(self, request):
-        pass
+        if self.request.is_ajax:
+            if request.POST.get('action') == 'add_stock':
+                return self.add_stock(request)
 
     def get(self, request):
         if self.request.is_ajax:
@@ -74,3 +77,28 @@ class APIView(TemplateView):
             exceptions['JSONBuild'] = 'Error creating JSON response.'
             response_dict = JsonResponse(exceptions)
             return response_dict
+
+    def add_stock(self, request):
+        user = User.objects.get(username=request.user);
+        symbol = request.POST.get('symbol', '');
+
+        response_dict = {
+            'success': 'initial',
+        }
+
+        try:
+            user.stocks.add(Stock.objects.get(ticker=symbol))
+            user.save()
+            response_dict = {
+                'success': 'try',
+            }
+        except:
+            response_dict = {
+                'success': 'exception add_stock',
+            }
+
+        return HttpResponse(json.dumps(response_dict))
+
+
+    def remove_stock(self, request):
+        pass

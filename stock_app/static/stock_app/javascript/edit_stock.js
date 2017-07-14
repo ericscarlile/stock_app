@@ -29,6 +29,7 @@ function remove_stock(stock_symbol) {
 function add_stock(stock_symbol) {
 
     $.ajax({
+        url: "/api",
         type:"POST",
         data: {
             action: "add_stock",
