@@ -15,6 +15,7 @@ $.ajaxSetup({
 
 function remove_stock(stock_symbol) {
     $.ajax({
+        url: "/api",
         type:"POST",
         data: {
             action: "remove_stock",

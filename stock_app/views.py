@@ -37,43 +37,6 @@ class IndexView(LoginRequiredMixin, generic.ListView):
         for stock in list(user.stocks.all()):
             self.test_list.append(stock.ticker)
 
-    def ajax(self, request):
-
-        user = User.objects.get(username=request.user);
-        action = request.POST.get('action', '');
-        symbol = request.POST.get('symbol', '');
-
-        response_dict = {
-            'success': 'initial',
-        }
-
-        if action == 'add_stock':
-            try:
-                user.stocks.add(Stock.objects.get(ticker=symbol))
-                user.save()
-                response_dict = {
-                    'success': 'try',
-                }
-            except:
-                response_dict = {
-                    'success': 'exception add_stock',
-                }
-
-        if action == 'remove_stock':
-            try:
-                user.stocks.remove(Stock.objects.get(ticker=symbol))
-                response_dict = {
-                    'success': 'removed',
-                }
-            except:
-                response_dict = {
-                    'success': 'exception remove_stock',
-                }
-
-        return HttpResponse(json.dumps(response_dict))
-
-
-
 
 class StockDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = 'stock_app/stock_detail.html'

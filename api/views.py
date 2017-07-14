@@ -15,6 +15,8 @@ class APIView(TemplateView):
         if self.request.is_ajax:
             if request.POST.get('action') == 'add_stock':
                 return self.add_stock(request)
+            elif request.POST.get('action') == 'remove_stock':
+                return self.remove_stock(request)
 
     def get(self, request):
         if self.request.is_ajax:
@@ -101,4 +103,17 @@ class APIView(TemplateView):
 
 
     def remove_stock(self, request):
-        pass
+        user = User.objects.get(username=request.user);
+        symbol = request.POST.get('symbol', '');
+
+        try:
+            user.stocks.remove(Stock.objects.get(ticker=symbol))
+            response_dict = {
+                'success': 'removed',
+            }
+        except:
+            response_dict = {
+                'success': 'exception remove_stock',
+            }
+
+        return HttpResponse(json.dumps(response_dict))
