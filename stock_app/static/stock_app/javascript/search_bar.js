@@ -6,7 +6,7 @@ function search_stocks(event) {
     $result_list = $('#results');
     $input_text = $('#search_box').val();
     formatted_input = encodeURIComponent($input_text.trim());
-    search_url = 'http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=' + formatted_input + '&region=1&lang=en'//&callback=YAHOO.Finance.SymbolSuggest.ssCallback';
+    formatted_url = 'http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=' + formatted_input + '&region=1&lang=en'//&callback=YAHOO.Finance.SymbolSuggest.ssCallback';
     exchanges = ['BZX', 'BYX', 'BOX',
                     'C2', 'CBOE', 'CHX',
                     'EDGA', 'EDGX',
@@ -14,28 +14,44 @@ function search_stocks(event) {
                     'NASDAQ', 'BX', 'PHLX',
                     'NSX', 'NYSE', 'NYSE ARCA', 'NYSE MKT']
 
-    /*$result_list.empty();
-    $result_list.append('<li><a href="#">' + search_url + '</a></li>');*/
-
     $.ajax({
         type: 'GET',
-        url: search_url,
-        jsonp: 'callback',
-        dataType: 'jsonp',
+        url: '/api',
+        //jsonp: 'callback',
+        //dataType: 'jsonp',
+        data: {
+            search_url: formatted_url,
+        },
         //jsonpCallback: "YAHOO.Finance.SymbolSuggest.ssCallback",
-        success: function(data) {
+
+        success: function(response) {
+            $result_list.empty();
+
+            if (response['Result']) {
+                $.each(response['Result'], function (key, stock) {
+                    $result_list.append('<li><a href="/stock/' + stock['symbol'] + '">' + stock['symbol'] +
+                        ': ' + stock['name'] + '</a></li>');
+                })
+            }
+            else {
+                $result_list.append('<li><a href="#">No search results found.</a></li>');
+            }
+            console.log(response)
+        },
+        /*success: function(data) {
 
             $result_list.empty();
-            $.each(data['ResultSet']['Result'], function(key, obj){
+            $.each(data['Result'], function(key, obj){
                 if ($.inArray(obj['exchDisp'], exchanges) !== -1) {
                     $result_list.append('<li><a href="/stock/' + obj['symbol'] + '">' + obj['symbol'] +
                         ': ' + obj['name'] + '</a></li>');
                     };
                 });
-            },
-        error: function(data) {
-            console.log("There was an error.")
-            console.log(data)
+                else if $
+            },*/
+        error: function(response) {
+            console.log("There was an error in the AJAX call.")
+            console.log(response)
         }
     });
 }
