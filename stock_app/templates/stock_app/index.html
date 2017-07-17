@@ -7,7 +7,7 @@
     <form>{% csrf_token %}</form>
 <section class="row">
     <h4></h4>
-    {% for stock in user.stocks.all %}
+    {% for stock in user_stock_list %}
     <article id="{{ stock.ticker }}" class="col-md-4 col-sm-6 col-xs-12 panel panel-success">
         <div class="panel-heading"><a href="/stock/{{ stock.ticker }}">{{ stock.name }}</a>
             <form>{% csrf_token %}</form>

@@ -11,21 +11,22 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from yahoo_finance import Share
 from django.utils import timezone
+import datetime
 
 from .models import Stock, User
 
 
 class IndexView(LoginRequiredMixin, generic.ListView):
     template_name = 'stock_app/index.html'
-    test_list = []
+    user_stock_list = []
 
 
 
     def get(self, request):
-        self.test_list = []
+        self.user_stock_list = []
         self.update_stocks(request)
         return render(request, self.template_name, {
-            'test_info': self.test_list,
+            'user_stock_list': self.user_stock_list,
         })
 
     def post(self, request, *args, **kwargs):
@@ -34,8 +35,19 @@ class IndexView(LoginRequiredMixin, generic.ListView):
 
     def update_stocks(self, request):
         user = User.objects.get(username=request.user)
-        for stock in list(user.stocks.all()):
-            self.test_list.append(stock.ticker)
+        for stock in list(user.stocks.order_by('name')):
+            if stock.last_updated < datetime.date.today():
+                try:
+                    stock_info = Share(stock.ticker)
+                    stock.price = stock_info.get_price()
+                    stock.price_target = stock_info.get_one_yr_target_price()
+                    stock.last_updated = timezone.now()
+                    stock.save()
+                except:
+                    pass
+            self.user_stock_list.append(stock)
+
+
 
 
 class StockDetailView(LoginRequiredMixin, generic.DetailView):
@@ -47,13 +59,13 @@ class StockDetailView(LoginRequiredMixin, generic.DetailView):
             return self.ajax(request)
 
         return render(request, self.template_name, {
-            #'stock_tracked': self.stock_tracked(request, symbol)
         })
 
     def get(self, request, symbol):
 
         try:
             stock = Stock.objects.get(ticker=symbol)
+            self.update_stock(stock)
         except ObjectDoesNotExist:
             stock_info = Share(symbol)
             stock = Stock(
@@ -114,6 +126,17 @@ class StockDetailView(LoginRequiredMixin, generic.DetailView):
                 return True
         except:
             return False
+
+    def update_stock(self, stock):
+        if stock.last_updated < datetime.date.today():
+            try:
+                stock_info = Share(stock.ticker)
+                stock.price = stock_info.get_price()
+                stock.price_target = stock_info.get_one_yr_target_price()
+                stock.last_updated = timezone.now()
+                stock.save()
+            except:
+                pass
 
 
 # This class has been replaced by ajax calls.
